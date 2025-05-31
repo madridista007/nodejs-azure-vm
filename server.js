@@ -3,7 +3,7 @@ const app = express();
 const PORT = 3000;
 
 app.get("/", (req, res) => {
-  res.send("Hello from Node.js on Azure VM!");
+  res.send("Hello from Node.js on Azure VM! Test pipline");
 });
 
 app.listen(PORT, () => {
