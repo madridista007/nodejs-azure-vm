@@ -1,0 +1,25 @@
+name: Deploy Node.js App to Azure VM
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.AZURE_VM_IP }}       # From GitHub Secrets
+          username: ${{ secrets.AZURE_VM_USERNAME }}  # From GitHub Secrets
+          key: ${{ secrets.AZURE_VM_SSH_KEY }}    # From GitHub Secrets
+          script: |
+            set -e  # Fail script on any error
+            cd /home/azureuser/app  # Your app path
+            git pull origin main
+            npm install --production
+            pm2 restart server.js || pm2 start server.js
